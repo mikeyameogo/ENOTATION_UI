@@ -1,0 +1,18 @@
+  /*
+   * Footer
+   */
+  
+  .blog-footer {
+      padding: 1rem 0;
+      ;
+      color: #ffffff;
+      text-align: center;
+      background-color: #002a40;
+     font-size: 20px;
+  }
+  
+  .blog-footer p:last-child {
+      margin-bottom: 0;
+  }
+
+ 

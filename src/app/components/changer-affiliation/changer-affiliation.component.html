@@ -1,0 +1,63 @@
+<p-toast></p-toast>
+<br>
+<p-card header="Changement de supérieur hiérarchique"  class="d-flex justify-content-center">
+    <!-- <div class="p-error" *ngIf="!superieur">{{message}}</div> -->
+    <form  #dtf="ngForm">
+        <div class="p-field p-fluid" >
+            <label for="oldCodeAffiliation">Ancien code</label>
+            <input type="text" pInputText id="oldCodeAffiliation" [(ngModel)]="oldCodeAffiliation" name="oldCodeAffiliation" required autofocus />
+            <small class="p-error" *ngIf="submitted && !oldCodeAffiliation">Ancien code requis.</small>
+        </div>
+        <div class="p-field p-fluid" >
+            <label for="newCodeAffiliation">Nouveau code</label>
+            <input class="p-md-6" type="text" pInputText id="newCodeAffiliation" [(ngModel)]="newCodeAffiliation" name="newCodeAffiliation" required />
+            <small class="p-error" *ngIf="submitted && !newCodeAffiliation">Nouveau code requis.</small>
+        </div>
+        <div class="p-field p-fluid" >
+            <label for="reference">Référence certificat prise service</label>
+            <input class="p-md-6" type="text" pInputText id="reference" [(ngModel)]="reference" name="reference" required />
+            <small class="p-error" *ngIf="submitted && !reference">Référence certificat prise service requise.</small>
+        </div>
+        <div class="p-field p-fluid" >
+            <label for="motif">Motif</label>
+            <textarea pInputTextarea [(ngModel)]="motif" name="motif"></textarea>
+            <small class="p-error" *ngIf="submitted && !motif">Motif requis.</small>
+        </div>
+
+        <div  *ngIf="superieur" class="p-fluid p-col-6" style="text-align: justify;">
+            <br>
+            <p-table>
+                <ng-template pTemplate="header">
+                    <tr class="p-field p-fluid">
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Matricule</th>
+                        <th>Code</th>
+                    </tr>
+                    <tr class="p-field p-fluid">
+                        <td>{{superieur.nom!}}</td>
+                        <td>{{superieur.prenom!}}</td>
+                        <td>{{superieur.matricule!}}</td>
+                        <td>{{superieur.codeGenere!}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-divider></p-divider>
+        <div class="p-ml-auto text-right">
+            <button type="submit"  label="Vérifier"
+                    icon="pi pi-check" (click)="verifier()" *ngIf="!superieur"
+                    class="p-button-raised p-button-text p-button-success"
+                    pButton>
+                </button>
+                <button type="submit"  label="Enregistrer"
+                    icon="pi pi-save" (click)="save()" *ngIf="!superieur"
+                    class="p-button-raised p-button-text p-button-success"
+                    pButton>
+                </button>
+            <p-button type="reset" label="Annuler" icon="pi pi-times" styleClass="p-button-secondary" [style]="{'margin-left': '.5em'}"></p-button>
+        </div>
+    </form>
+</p-card>
+<br>

@@ -1,0 +1,53 @@
+
+    * {
+        box-sizing: border-box;
+    }
+    .flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 30px;
+}
+
+.sub-title {
+    color: #7F7F7F;
+}
+
+.flex-item-left {
+    flex: 60%;
+}
+
+.flex-item-right {
+    flex: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.flex-item-right h6 {
+    color: white;
+}
+
+.aitem {
+    color: #000000e1;
+    font-size: 50%;
+}
+
+.flex-item-center {
+    /* flex: 10%; */
+    text-align: left;
+}
+
+/* Responsive layout - makes a one column-layout instead of a two-column layout */
+
+@media (max-width: 800px) {
+
+    .flex-item-right,
+    .flex-item-left {
+        flex: 100%;
+    }
+}
+
+.hearder-top {
+    border-top: 5px solid hsl(33, 100%, 50%);
+}

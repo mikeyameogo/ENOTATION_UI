@@ -1,0 +1,26 @@
+<!-- <div>
+    <button pButton label="Ajouter" icon="pi pi-plus" class="p-button-raised p-button-text p-button-success mr-2"
+      [disabled]="!enableCreate" (click)="fireCreate()">
+    </button>
+    <button pButton label="Editer" icon="pi pi-pencil" class="p-button-raised p-button-text p-button-primary mr-2"
+      [disabled]="!enableEdit" (click)="fireEdit()">
+    </button> -->
+<!-- <button pButton label="Supprimer" icon="pi pi-trash" class="p-button-raised p-button-text p-button-danger"
+      [disabled]="!enableDelete" (click)="fireDelete()">
+    </button>
+</div>  -->
+<div>
+
+    <button pButton pRipple type="button" icon="pi pi-bookmark" label="" pTooltip="Attribuer des activités" class="p-button-raised p-button-success mr-2" [hidden]="!enableBtnAttribuer" (click)="fireInfo()"></button>
+    <button pButton pRipple type="button" icon="pi pi-pencil" label="" pTooltip="Noter l'agent" class="p-button-raised p-button-info mr-2 " [hidden]="!enableBtnNoter" (click)="fireEdit()"></button>
+    <button pButton pRipple type="button" icon="pi pi-eye" label="" pTooltip="Détails" class="p-button-raised p-button-info mr-2 " [hidden]="!enableBtnInfo" (click)="fireInfo()"></button>
+    <button pButton pRipple type="button" icon="pi pi-pencil" label="" pTooltip="Editer" class="p-button-raised p-button-success mr-2" [hidden]="!enableBtnEdit" (click)="fireEdit()"></button>
+    <button pButton pRipple type="button" icon="pi pi-check" label="" pTooltip="Cloturer" class="p-button-raised p-button-help mr-2" [hidden]="!enableBtnCloture" (click)="fireCloture()"></button>
+    <button pButton pRipple type="button" icon="pi pi-trash" label="" pTooltip="Rejeter l'agent" class="p-button-raised p-button-danger mr-2" pTooltip="Rejeter l'agent" [hidden]="!enableBtnRejeter" (click)="fireRejeter()"></button>
+    <button pButton pRipple type="button" icon="pi pi-trash" label="" pTooltip="Supprimer" class="p-button-raised p-button-danger mr-2" pTooltip="Supprimer" [hidden]="!enableBtnDelete" (click)="fireDelete()"></button>
+    <button pButton pRipple type="button" icon="pi pi-bookmark" label="Privileges" pTooltip="Privilege" class="p-button-raised p-button-secondary mr-2" pTooltip="Privileges" [hidden]="!enableBtnPrivilege" (click)="firePrivilege()"></button>
+    <button pButton pRipple type="button" icon="pi pi-download" label="" pTooltip="Telecharger" class="p-button-raised p-button-warning mr-2" pTooltip="Imprimer" [hidden]="!enableBtnPrint" (click)="firePrint()"></button>
+    <button pButton pRipple type="button" icon="pi pi-thumbs-up" label="" pTooltip="Accepter la note" class="p-button-raised p-button-success mr-2" pTooltip="Accepter la note" [hidden]="!enableBtnAccepter" (click)="fireAccepter()"></button>
+    <button pButton pRipple type="button" icon="pi pi-thumbs-down" label="" pTooltip="Rejeter la note" class="p-button-raised p-button-danger mr-2" pTooltip="Rejeter la note" [hidden]="!enableBtnRejeterNote" (click)="fireRejeterNote()"></button>
+
+</div>

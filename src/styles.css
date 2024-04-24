@@ -1,0 +1,141 @@
+/* You can add global styles to this file, and also import other style files */
+.app-primary-color {
+    color: #ED882F;
+}
+
+.p-2 {
+padding: 0rem!important; 
+}
+
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    overflow-x: hidden;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: left;
+    color: #3c4b64;
+    background-color: #ffffff;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+}
+/* .app-secondary-color {
+    color: #4E4F50;
+} */
+
+/* .app-form-bg-color {
+    background-color: #DBDEDD;
+} */
+
+/* .app-background-gradient {
+    background: rgb(191,192,194);
+    background: linear-gradient(180deg, rgba(191,192,194,1) 0%, rgba(255,255,255,1) 25%);
+} */
+
+
+.p-menubar {
+    display: flex;
+    align-items: center;
+    background: local;
+    font-size: 16px;
+    border: 0;
+}
+
+
+.p-menubar {
+    padding: 0.5rem;
+    background: #002a40;;
+    color: #ffffff;
+    width: 100%;
+    border: 0px;
+    border-bottom: 05px solid #002a40;
+   /* border-bottom: 05px solid #002a40;*/
+    border-radius: 0px;
+   
+}
+
+.p-menubar .p-menubar-root-list {
+    background: #002a40;
+    opacity: 0.9;
+   
+}
+
+
+
+.p-menubar .p-menubar-root-list>.p-menuitem>.p-menuitem-link .p-menuitem-text {
+    color: white;
+}
+
+.p-menubar .p-menubar-root-list>.p-menuitem>.p-menuitem-link .p-submenu-icon {
+    color: white;
+    margin-left: 0.5rem;
+}
+
+.p-menubar .p-menubar-root-list>.p-menuitem.p-menuitem-active>.p-menuitem-link,
+.p-menubar .p-menubar-root-list>.p-menuitem.p-menuitem-active>.p-menuitem-link:not(.p-disabled):hover {
+    background: #002a40;
+    border: 2px solid #dee2e6;
+}
+
+.p-menubar .p-menubar-root-list>.p-menuitem.p-menuitem-active>.p-menuitem-link .p-submenu-icon,
+.p-menubar .p-menubar-root-list>.p-menuitem.p-menuitem-active>.p-menuitem-link:not(.p-disabled):hover .p-submenu-icon {
+    color: #002a40;
+}
+
+.p-menubar .p-menubar-root-list>.p-menuitem>.p-menuitem-link:not(.p-disabled):hover .p-menuitem-text {
+    color: rgb(160, 153, 153);
+    background-color: #002a40;
+}
+
+.p-menubar .p-menubar-root-list>.p-menuitem>.p-menuitem-link:not(.p-disabled):hover {
+    background: #002a40;
+    text-decoration: none;
+}
+
+.p-menubar .p-menubar-root-list>.p-menuitem>.p-menuitem-link:focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: inset 0 0 0 0.15rem #f7f5f3;
+}
+
+.p-menubar .p-menubar-root-list>.p-menuitem.p-menuitem-active>.p-menuitem-link .p-menuitem-text,
+.p-menubar .p-menubar-root-list>.p-menuitem.p-menuitem-active>.p-menuitem-link:not(.p-disabled):hover .p-menuitem-text {
+    color: aquamarine;
+}
+
+.p-menubar .p-menubar-root-list>.p-menuitem.p-menuitem-active>.p-menuitem-link,
+.p-menubar .p-menubar-root-list>.p-menuitem.p-menuitem-active>.p-menuitem-link:not(.p-disabled):hover {
+    background: #002a40;
+    border: 0px solid #002a40;
+}
+
+
+.p-menubar .p-menubar-root-list>.p-menuitem.p-menuitem-active>.p-menuitem-link .p-menuitem-icon,
+.p-menubar .p-menubar-root-list>.p-menuitem.p-menuitem-active>.p-menuitem-link:not(.p-disabled):hover .p-menuitem-icon {
+    color: #ffffff;
+}
+
+.p-menubar .p-menubar-root-list>.p-menuitem>.p-menuitem-link .p-menuitem-icon {
+    color: #ffffff;
+    margin-right: 0.5rem;
+}
+
+
+.p-button {
+    color: #ffffff;
+    background: #002a40;
+    border: 1px solid #002a40;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    border-radius: 3px;
+  }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

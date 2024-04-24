@@ -1,0 +1,97 @@
+<p-toast></p-toast>
+<div class="card">
+    <p-toolbar styleClass="p-mb-4">
+        <ng-template pTemplate="left">
+            <button pButton label="Ajouter" icon="pi pi-plus" class="p-button-raised p-button-text p-button-success mr-2"
+            [disabled]="!enableCreate" (click)="onCreate()" >
+          </button>
+        </ng-template>
+    </p-toolbar>
+      <p-table #dt [value]="periodes" [rows]="5" [paginator]="true" [globalFilterFields]="['periodType']"
+ [rowHover]="true" dataKey="id"
+currentPageReportTemplate="Affichage de {first} à {last} de {totalRecords} élements" [showCurrentPageReport]="true">
+    <ng-template pTemplate="caption" >
+      <div class="p-d-flex p-ai-center p-jc-between">
+        <h5 class="p-m-0">Liste des periodes</h5>
+        <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($any($event.target)!.value, 'contains')" placeholder="Recherche..." />
+        </span>
+    </div>
+  </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Date Debut</th>
+            <th>Date fin</th>
+            <th>Type Periode</th>
+            <th>Ministere</th>
+
+
+            <th [style]="{'width':'150px'}">Action</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-periode>
+        <tr>
+            <td>{{periode.dateDebut}}</td>
+            <td>{{periode.dateFin}}</td>
+            <td>{{periode.periodType}}</td>
+            <td>Ministere</td>
+            <td>
+                <button pButton pRipple icon="pi pi-pencil" pTooltip="Editer" tooltipPosition="bottom" class="p-button-rounded p-button-success p-mr-2" (click)="onEdit(periode)" ></button>
+                <button pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" tooltipPosition="bottom" class="p-button-rounded p-button-danger" (click)="onDelete(periode)" ></button>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+  <!-- Dialog-->
+  <p-dialog [(visible)]="showDialog" [breakpoints]="{'980px': '98vw', '840px': '100vw'}" [style]="{width: '54vw'}" >
+    <ng-template pTemplate="header">
+      <i class="{{isEditing() ? 'pi-pencil' : 'pi-plus'}} pi p-mr-1"></i>
+      <span class="p-mr-auto">
+        {{periode.id ? 'Modifier' : 'Ajouter'}} une periode 
+      </span>
+    </ng-template>
+    <p-progressBar *ngIf="isDialogOpInProgress" mode="indeterminate"></p-progressBar>
+    <!-- <p-message *ngIf="dialogErrorMessage" severity="error" [text]="dialogErrorMessage"></p-message> -->
+    <p-divider></p-divider>
+    <!-- Form -->
+    
+    <form (ngSubmit)="save()" #dtf="ngForm">
+      <div class="p-field p-fluid">
+        <label for="ministereInstitution">Ministere</label>
+        <p-dropdown id="ministereInstitution" name="ministereInstitution" #ministereInstitution="ngModel" [(ngModel)]="periode.ministereInstitution" [options]="ministeres"  placeholder="Selectionner un Ministere" optionLabel="libelle" [showClear]="true"></p-dropdown>
+       
+
+        <!-- <input id="ministereInstitution" name="ministereInstitution" #ministereInstitution="ngModel" [(ngModel)]="periode.ministereInstitution" pInputText required /> -->
+    </div>
+        <div class="p-field p-fluid">
+            <label for="dateDebut">Date Debut</label>
+            <p-calendar dateFormat="dd/mm/yy" id="dateDebut" name="dateDebut" #dateDebut="ngModel" [(ngModel)]="periode.dateDebut"  [showIcon]="true" inputId="icon"></p-calendar>
+            <!-- <input id="dateDebut" name="dateDebut" #dateDebut="ngModel" [(ngModel)]="periode.dateDebut" pInputText required /> -->
+        </div>
+        <div class="p-field p-fluid">
+            <label for="dateFin">Date Fin</label>
+
+            <p-calendar id="dateFin" name="dateFin" #dateFin="ngModel" [(ngModel)]="periode.dateFin"  [showIcon]="true" inputId="icon"></p-calendar>
+
+
+        </div>
+
+        <div class="p-field p-fluid">
+          <label for="periodType">Type Periode ("NOTE" ou "ACTIVITE")</label>
+          <input id="periodType" name="periodType" #periodType="ngModel" [(ngModel)]="periode.periodType" pInputText required />
+      </div>
+
+      
+
+      <p-divider></p-divider>
+      <div class="p-ml-auto text-right">
+        <button type="submit" [disabled]="!dtf.form.valid" label="{{isEditing() ? 'Enregistrer' : 'Ajouter'}}"
+          icon="pi {{isEditing() ? 'pi-save' : 'pi-plus'}}"
+          class="p-button-raised p-button-text {{isEditing() ? 'p-button-primary' : 'p-button-success'}}" pButton>
+        </button>
+      </div>
+    </form>
+  </p-dialog>
+</div>

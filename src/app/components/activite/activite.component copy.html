@@ -1,0 +1,70 @@
+<div class="card">
+    <p-table #dt1 [value]="activites" dataKey="id"
+        [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" [loading]="loading" styleClass="p-datatable-customers p-datatable-gridlines"
+        [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [globalFilterFields]="['name','country.name','representative.name','status']">
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex">
+                <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
+                <span class="p-input-icon-left p-ml-auto">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt1.filterGlobal($any($event.target)!.value, 'contains')" placeholder="Search keyword" />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <!--
+                <th>
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                        Name 
+                        <p-columnFilter type="text" field="name" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+                -->
+                <th>
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                        Activite 
+                        <p-columnFilter type="text" field="activite.libelle" display="menu"></p-columnFilter>
+                    </div>
+                </th>
+            
+               
+                <th>
+                    <div class="p-d-flex p-jc-between p-ai-center">
+                        Taux de realisation
+                        <p-columnFilter field="activity" matchMode="between" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                            <ng-template pTemplate="filter" let-filter="filterCallback">
+                                <p-slider [ngModel]="activityValues" [range]="true" (onSlideEnd)="filter($any($event)!.values)" styleClass="p-m-3"></p-slider>
+                                <div class="p-d-flex p-ai-center p-jc-between p-px-2">
+                                    <span>{{activityValues[0]}}</span>
+                                    <span>{{activityValues[1]}}</span>
+                                </div>
+                            </ng-template>
+                        </p-columnFilter>
+                    </div>
+                </th>
+               
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-activite>
+            <tr>
+                <td>
+                    {{activite.libelle}}
+                </td>
+            
+              
+                <td>
+                    <p-progressBar [value]="activite.taux_realisation" [showValue]="false"></p-progressBar>
+                </td>
+            
+                
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="7">No customers found.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

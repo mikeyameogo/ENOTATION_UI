@@ -1,0 +1,24 @@
+<div>
+<p-card>
+    <div class="row">
+        <div class="col-md-6 col-xl-6">
+            <div class="card bg-c-blue order-card" >
+                <div class="card-block" (click)="tache()">
+                    <h6 class="m-b-30">Mes activités</h6>
+                    <h2 class="text-right"><i class="fa fa-cart-plus f-left"></i><span>{{nbTache}}</span></h2>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-xl-6">
+            <div class="card bg-c-green order-card" (click)="note()">
+                <div class="card-block">
+                    <h6 class="m-b-20">Mes notes</h6>
+                    <h2 class="text-right"><i class="fa fa-rocket f-left"></i><span>{{nbNote}}</span></h2>
+                </div>
+            </div>
+        </div>
+	</div>
+</p-card>
+    
+</div>

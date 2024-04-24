@@ -1,0 +1,151 @@
+<div>
+    <p-toast></p-toast>
+    <p-card>
+      <p-toast></p-toast>
+      <app-panel-header header="Attribuer une activité à l'agent matricule:{{matriculeAgent}}" ></app-panel-header>
+      <div class="p-d-flex">
+        <app-crud-toolbar [enableCreate]="enableCreate" (create)="onCreate()">
+        </app-crud-toolbar>
+        <div class="p-ml-auto">
+          <p-message *ngIf="message" [severity]="message.severity" [text]="message.summary"></p-message>
+          <p-progressSpinner *ngIf="isOpInProgress" strokeWidth="4" [style]="{width: '50px', height: '50px'}">
+          </p-progressSpinner>
+        </div>
+      </div>
+      <p-divider></p-divider>
+      
+      <p-table #dt [value]="activites" responsiveLayout="stack" [paginator]="true" [rows]="recordsPerPage"
+        [loading]="isLoading" (onLazyLoad)="loadAll($event)" [totalRecords]="totalRecords"
+        [globalFilterFields]="['libelle']"
+        currentPageReportTemplate="Affichage {first} à {last} de {totalRecords} élements" [showCurrentPageReport]=true
+        [rowsPerPageOptions]="[10, 20]" styleClass="p-datatable-sm">
+  
+        <ng-template pTemplate="caption">
+          <div class="p-d-flex">
+            <div class="col-sm-auto">
+              <span>Liste des activités</span>
+            </div>
+            <div class="p-ml-auto p-mr-2 p-input-icon-left">
+              <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" (input)="dt.filterGlobal($any($event.target)!.value, 'contains')"
+                  placeholder="Recherche..." />
+              </span>
+            </div>
+          </div>
+        </ng-template>
+  
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="libelle">Libelle
+              <p-sortIcon field="libelle"></p-sortIcon>
+            </th>
+            <th SortableColumn="observation">Observations
+            </th>
+            <th SortableColumn="taux de realisation">Taux de réalisation
+            </th>
+            <th class="actionsStyle">Actions</th>
+  
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-activite let-columns="columns">
+          <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" [pContextMenuRow]="activite">
+            <td><span class="p-column-title">Libellé</span>{{activite.libelle}}</td>
+            <td><span class="p-column-title">Observations</span>{{activite.observation}}</td>
+            <td><span class="p-column-title">Taux de realisation</span>{{activite.taux_realisation}} %</td>
+            <td>
+              <!-- <app-actions-toolbar-iud (info)="openModalDetail(activite)" [enableBtnInfo]="enableBtnInfo" (edit)="onEdit(activite)"
+                [enableBtnEdit]="enableBtnEdit" (delete)="onDelete(activite)" [enableBtnDelete]="enableBtnDelete" (delete)="onDelete(activite)">
+              </app-actions-toolbar-iud> -->
+
+              <app-actions-toolbar-iud (info)="onInfo(activite)" [enableBtnInfo]="enableBtnInfo" 
+                (edit)="onEdit(activite)" [enableBtnEdit]="enableBtnEdit" 
+                (delete)="onDelete(activite)" [enableBtnDelete]="enableBtnDelete">
+              </app-actions-toolbar-iud>
+            <!-- </td> -->
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
+  
+  <!-- Dialog ajout-->
+  <p-dialog [(visible)]="showDialog" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw'}" >
+    <ng-template pTemplate="header">
+      <i class="{{isEditing() ? 'pi-pencil' : 'pi-plus'}} pi p-mr-1"></i>
+      <span class="p-mr-auto">
+        {{activite.id ? 'Modifier' : 'Ajouter'}} une activité
+      </span>
+    </ng-template>
+    <p-progressBar *ngIf="isDialogOpInProgress" mode="indeterminate"></p-progressBar>
+    <p-message *ngIf="dialogErrorMessage" severity="error" [text]="dialogErrorMessage"></p-message>
+    <p-divider></p-divider>
+    <!-- Form -->
+    <form (ngSubmit)="save()" #dtf="ngForm">
+        <div class="p-field p-fluid">
+            <label for="libelle">Libellé</label>
+            <input id="libelle" name="libelle" #libelle="ngModel" [(ngModel)]="activite.libelle" pInputText required />
+        </div>
+        <!-- <div class="p-field p-fluid">
+          <label for="taux_realisation">Taux realisation</label>
+          <input id="taux_realisation" name="taux_realisation" #taux_realisation="ngModel" [(ngModel)]="activite.taux_realisation" pInputText required />
+      </div> -->
+      <p-divider></p-divider>
+      <div class="p-ml-auto text-right">
+        <button type="submit" [disabled]="!dtf.form.valid" label="{{isEditing() ? 'Enregistrer' : 'Ajouter'}}"
+          icon="pi {{isEditing() ? 'pi-save' : 'pi-plus'}} "
+          class="p-button-raised p-button-text {{isEditing() ? 'p-button-primary' : 'p-button-success'}}" pButton>
+        </button>
+      </div>
+    </form>
+  </p-dialog>
+  
+  <!-- Dialog modifier-->
+  <p-dialog [(visible)]="showDialogUpdate" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw'}" >
+    <ng-template pTemplate="header">
+      <i class="pi-pencil pi p-mr-1"></i>
+      <span class="p-mr-auto">
+        Modifier une activité
+      </span>
+    </ng-template>
+    <p-progressBar *ngIf="isDialogOpInProgress" mode="indeterminate"></p-progressBar>
+    <p-message *ngIf="dialogErrorMessage" severity="error" [text]="dialogErrorMessage"></p-message>
+    <p-divider></p-divider>
+    <!-- Form -->
+    <form (ngSubmit)="save()" #dtf="ngForm">
+        <div class="p-field p-fluid">
+            <label for="libelle">Libellé</label>
+            <input id="libelle" name="libelle" #libelle="ngModel" [(ngModel)]="activite.libelle" pInputText required />
+        </div>
+        <div class="p-field p-fluid">
+          <label for="taux_realisation">Taux réalisation</label>
+          <p-inputNumber [(ngModel)]="activite.taux_realisation"  id="taux_realisation" name="taux_realisation" #taux_realisation="ngModel" placeholder="entre 0 et 100" mode="decimal" [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="100">
+          </p-inputNumber>
+          <!-- <input id="taux_realisation" name="taux_realisation" #taux_realisation="ngModel" [(ngModel)]="activite.taux_realisation" pInputText required /> -->
+        </div>
+        <div class="p-field p-fluid">
+          <label for="observation">Observations</label>
+          <input id="observation" name="observation" #observation="ngModel" [(ngModel)]="activite.observation" pInputText required  style="height: 100px;"/>
+          <!-- <div class="p-error" *ngIf="adresse.invalid && (adresse.dirty || adresse.touched) && adresse.errors.required">
+            <span>Veillez renseigner l'adresse de la direction</span>
+          </div> -->
+        </div>
+        <!-- <div class="p-field p-fluid">
+          <p-inputNumber [(ngModel)]="val"  placeholder="1.0" mode="decimal" [showButtons]="true" inputId="minmax-buttons" [min]="0" [max]="100">
+          </p-inputNumber>
+        </div> -->
+      <p-divider></p-divider>
+      <div class="p-ml-auto text-right">
+        <button label="Annuler" (click)="clear()" class="p-button-filter mr-3" pButton icon="pi pi-times"></button>
+  
+        <button type="submit" [disabled]="!dtf.form.valid" label="Enregistrer"
+          icon="pi pi-save"
+          class="p-button-raised p-button-text {{isEditing() ? 'p-button-primary' : 'p-button-success'}}" pButton>
+        </button>
+      </div>
+    </form>
+  </p-dialog>
+  
+  <app-confirmation></app-confirmation>
+  

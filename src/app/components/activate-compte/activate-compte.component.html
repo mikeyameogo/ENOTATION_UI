@@ -1,0 +1,199 @@
+<div>
+    <p-card>
+      <!-- <app-panel-header header="Creation d'un compte d'utilisateur" icon="fa fa-2x fa-user-plus"></app-panel-header> -->
+      <div style="max-width: 60vw;margin: auto;">
+        <!-- <p-steps [model]="stepItems" [activeIndex]="activeStep"></p-steps> -->
+        <div class="p-mb-2">
+          <!-- <p-message *ngIf="message" [severity]="message.severity" [text]="message.detail"></p-message> -->
+        </div>
+        <!--Verification Form-->
+        <!--When activate step == 0, this will be shown-->
+        <div>
+          <form  *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && activateCompte()" #f="ngForm" novalidate>
+            <div class="p-fluid p-grid">
+              <div class="p-fluid p-col-12 p-md-6">
+              <label for="matricule">Matricule</label>
+              <input id="matricule" name="matricule" #matricule="ngModel" [(ngModel)]="fonctionnaire.matricule" pInputText required />
+              <!-- <div class="p-error" *ngIf="matricule.invalid && (matricule.dirty || matricule.touched) && matricule.errors.required">
+                <span>Veillez renseigner votre matricule</span>
+              </div> -->
+            </div>
+            <div class="p-fluid p-col-12 p-md-6">
+              <label for="codeAffiliation">Code du superieur hierachique</label>
+              <input id="codeAffiliation" name="codeAffiliation" #codeAffiliation="ngModel" [(ngModel)]="fonctionnaire.codeAffiliation" pInputText required />
+              <!-- <div class="p-error" *ngIf="codeAffiliation.invalid && (codeAffiliation.dirty || codeAffiliation.touched) && codeAffiliation.errors.required">
+                <span>Veillez renseigner votre codeAffiliation</span>
+              </div> -->
+            </div>
+            <!-- <div class="p-fluid p-col-12 p-md-6">
+              <label for="ministereInstitution">Ministère ou institution</label>
+              <p-autoComplete inputId="ministereInstitution" #ministereInstitution="ngModel"  name="ministereInstitution" [(ngModel)]="fonctionnaire.ministereInstitution" [suggestions]="filteredMinisteresI" placeholder="Selectionnez ..." (completeMethod)="filteredMinistere($event)" field="libelle" [dropdown]="true">
+                <ng-template let-ministereInstitution pTemplate="item">
+                    <div class="ministereInstitution-item">
+                        <div>{{ministereInstitution.libelle}}</div>
+                    </div>
+                </ng-template>
+            </p-autoComplete>
+            </div> -->
+
+            <div class="p-fluid p-col-12 p-md-6">
+              <label for="profil">Fonction</label>
+              <p-autoComplete inputId="profil" #profil="ngModel"  name="profil" [(ngModel)]="fonctionnaire.profil" [suggestions]="filteredProfils" placeholder="Selectionnez ..." (completeMethod)="filteredProfil($event)" field="libelle" [dropdown]="true">
+                <ng-template let-profil pTemplate="item">
+                    <div class="profil-item">
+                        <div>{{profil.libelle}}</div>
+                    </div>
+                </ng-template>
+            </p-autoComplete>
+            </div>
+            <!-- <div class="p-fluid p-col-12 p-md-6">
+              <label for="uniteAdministrative">Unité administrative</label>
+              <input id="uniteAdministrative" name="uniteAdministrative" #uniteAdministrative="ngModel" [(ngModel)]="fonctionnaire.uniteAdministrative" pInputText required />
+
+            </div> -->
+            <div class="p-fluid p-col-12 p-md-6">
+              <label for="telephone">Telephone</label>
+              <p-inputMask id="telephone" name="telephone" type="tel" #telephone="ngModel" [(ngModel)]="fonctionnaire.telephone" mask="(+226) 99-99-99-99" [required] = "true" ></p-inputMask>
+              <!-- <input id="telephone" name="telephone" #telephone="ngModel" [(ngModel)]="fonctionnaire.telephone" pInputText required /> -->
+              <!-- <div class="p-error" *ngIf="telephone.invalid && (telephone.dirty || telephone.touched) && telephone.errors.required">
+                <span>Veillez renseigner votre telephone</span>
+              </div> -->
+            </div>
+            <div class="p-fluid p-col-12 p-md-6">
+              <label for="emailAddress">Email</label>
+              <input id="emailAddress" type="email" name="emailAddress" #emailAddress="ngModel" [(ngModel)]="fonctionnaire.emailAddress" pInputText required />
+              <!-- <div class="p-error" *ngIf="emailAddress.invalid && (emailAddress.dirty || emailAddress.touched) && emailAddress.errors.required">
+                <span>Veillez renseigner votre emailAddress</span>
+              </div> -->
+            </div>
+
+            <div class="p-fluid p-col-12 p-md-6">
+              <label for="password">Nouveau mot de passe</label>
+              <input id="password" type="password" name="password" #password="ngModel" [(ngModel)]="fonctionnaire.password" pInputText
+                required />
+              <!-- <div class="p-error"
+                *ngIf="password!.invalid && (password.dirty || password.touched) && password.errors.required">
+                <span>Veillez renseigner votre No. password</span>
+              </div> -->
+            </div>
+            <div class="p-fluid p-col-12 p-md-6">
+              <label for="pwd-confirmation">Confirmation du Mot de Passe</label>
+              <p-password id="pwd-confirmation" name="pwd-confirmation" #confirmation="ngModel"
+                [(ngModel)]="pwdConfirmation" [toggleMask]="true" [feedback]="false" required>
+              </p-password>
+
+              <div class="p-error"
+                *ngIf="confirmation.invalid && (confirmation.dirty || confirmation.touched) ">
+                <span>Veillez renseigner la confirmation du mot de passe</span>
+              </div>
+              <div class="p-error"
+                *ngIf="(confirmation.dirty || confirmation.touched) && fonctionnaire.password !== pwdConfirmation">
+                <span>Les mots de passe ne sont pas les mêmes</span>
+              </div>
+
+              <!-- <div class="p-error"
+                *ngIf="password!.invalid && (password.dirty || password.touched) && password.errors.required">
+                <span>Veillez renseigner votre No. password</span>
+              </div> -->
+            </div>
+          </div>
+            <!-- <div class="p-field p-fluid">
+              <label for="dob">Date de Naissance</label>
+              <p-calendar id="dob" name="dob" appendTo="body" [(ngModel)]="request.dateNaissance" [readonlyInput]="true"
+                [monthNavigator]="true" [yearNavigator]="true" [maxDate]="maxDocumentDate" [yearRange]="yearRange"
+                [showIcon]="true" required>
+              </p-calendar>
+            </div>
+            <div class="p-field p-fluid">
+              <label for="dr">Date de Recrutement</label>
+              <p-calendar id="dr" name="dr" appendTo="body" [(ngModel)]="request.dateRecrutement" [readonlyInput]="true"
+                [monthNavigator]="true" [yearNavigator]="true" [maxDate]="maxDocumentDate" [yearRange]="yearRange"
+                [showIcon]="true" required>
+              </p-calendar>
+            </div>
+            <p-divider></p-divider>
+            <div class="text-right">
+              <button type="submit" pButton label="Verifier"
+                icon="pi {{isOpInProgress ? 'pi-spinner pi-spin' : 'pi-check-circle'}}"
+                class="p-button-raised p-button-text p-button-secondary p-mr-2" [disabled]="!af.form.valid">
+              </button>
+              <button type="reset" pButton label="Effacer" icon="pi pi-times-circle"
+                class="p-button-raised p-button-text p-button-secondary">
+              </button>
+            </div>
+          </form>
+        </div>
+        <div *ngIf="activeStep">
+          <p-progressBar *ngIf="isLoadingDossierTypes" mode="indeterminate"></p-progressBar>
+          <form (ngSubmit)="create()" #cf="ngForm">
+            <div class="p-field p-fluid">
+              <label for="dossiertype">Type de Retraite</label>
+              <p-dropdown id="dossiertype" name="dossiertype" #dtype="ngModel" [options]="dossierTypes"
+                [(ngModel)]="selectedType" optionLabel="name" required>
+              </p-dropdown>
+              <div class="p-error" *ngIf="dtype.invalid && (dtype.dirty || dtype.touched) && dtype.errors.required">
+                <span>Veillez selectionner un type de retraite</span>
+              </div>
+            </div>
+            <div class="p-field p-fluid">
+              <label for="email">Addresse Email</label>
+              <input id="email" name="email" type="email" #email="ngModel" [(ngModel)]="accountRequest.email" pInputText
+                email required />
+              <div class="p-error" *ngIf="email.invalid && (email.dirty || email.touched) && email.errors.required">
+                <span>Veillez renseigner votre addresse email</span>
+              </div>
+              <div class="p-error" *ngIf="email.invalid && (email.dirty || email.touched) && email.errors.email">
+                <span>Veillez renseigner une addresse email valide</span>
+              </div>
+            </div> -->
+            <!-- <div class="p-field p-fluid">
+              <label for="password">Mot de Passe</label>
+              <p-password id="password" name="password" #password="ngModel" [(ngModel)]="accountRequest.password"
+                [toggleMask]="true" [feedback]="false" minlength="6" required>
+              </p-password>
+              <div class="p-error"
+                *ngIf="password.invalid && (password.dirty || password.touched) && password.errors.required">
+                <span>Veillez renseigner votre mot de passe</span>
+              </div>
+              <div class="p-error"
+                *ngIf="password.invalid && (password.dirty || password.touched) && password.errors.minlength">
+                <span>Le mot de passe doit etre d'au moins 6 caracteres</span>
+              </div>
+            </div>
+            <div class="p-field p-fluid">
+              <label for="pwd-confirmation">Confirmation du Mot de Passe</label>
+              <p-password id="pwd-confirmation" name="pwd-confirmation" #confirmation="ngModel"
+                [(ngModel)]="pwdConfirmation" [toggleMask]="true" [feedback]="false" required>
+              </p-password>
+              <div class="p-error"
+                *ngIf="confirmation.invalid && (confirmation.dirty || confirmation.touched) && confirmation.errors.required">
+                <span>Veillez renseigner la confirmation du mot de passe</span>
+              </div>
+              <div class="p-error"
+                *ngIf="(confirmation.dirty || confirmation.touched) && accountRequest.password !== pwdConfirmation">
+                <span>Les mots de passe ne sont pas les memes</span>
+              </div> -->
+            <!-- </div> -->
+            <p-divider></p-divider>
+            <div class="text-right">
+              <!-- <button type="submit" pButton label="Activer"
+                icon="pi pi-spinner"
+                class="p-button-raised p-button-text p-button-secondary p-mr-2"
+              >
+              </button> -->
+              <button id="bt" type="submit" class="btn btn-lg btn-success">Activation</button>
+              <button type="reset" pButton label="Effacer" icon="pi pi-times-circle"
+                class="p-button-raised p-button-text p-button-secondary">
+              </button>
+              <div class="alert alert-danger" role="alert" *ngIf="f.submitted && isSuccessFailed">
+                Échec d'activation du compte: {{ errorMessage }}
+              </div>
+            </div>
+          </form>
+          <div class="alert alert-success" *ngIf="isSuccessful">
+            Veuillez consulter votre boite mail pour poursuivre!
+          </div>
+        </div>
+      </div>
+    </p-card>
+  </div>

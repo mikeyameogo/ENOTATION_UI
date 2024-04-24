@@ -1,0 +1,19 @@
+<p-menubar class="link-secondary" [model]="items" [autoDisplay]='true'>
+    <ng-template pTemplate="end">
+      <div *ngIf="isLoggedIn">
+        <p-splitButton label={{matricule}}  icon="pi pi-user"   [model]="sousItems"></p-splitButton>  
+      </div>
+      <div *ngIf="!isLoggedIn">
+          <button pButton type="button" icon="pi pi-sign-in"
+              class="p-button-secondary p-button-raised p-button-text p-button-rounded p-mr-3 app-brown p-mr-2"
+              style="background-color: #f8f9fa; color: #756254;" pTooltip="Se connecter"
+              tooltipPosition="bottom" (click)="null">
+          </button>
+          <button pButton type="button" icon="pi pi-user-plus"
+              class="p-button-secondary p-button-raised p-button-text p-button-rounded p-mr-3 app-brown p-mr-2"
+              style="background-color: #f8f9fa; color: #756254;" pTooltip="Creer Un Compte"
+              tooltipPosition="bottom" routerLink="/register">
+          </button>
+      </div>
+    </ng-template>
+  </p-menubar>

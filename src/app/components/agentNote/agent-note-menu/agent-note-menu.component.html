@@ -1,0 +1,248 @@
+<style>
+    * {
+      box-sizing: border-box;
+    }
+  
+    .flex-container {
+      display: flex;
+      flex-wrap: wrap;
+      font-size: 30px;
+    }
+  
+    .sub-title {
+      color: #7F7F7F;
+      font-size: 20px;
+    }
+  
+    .flex-item-left {
+      flex: 60%;
+    }
+  
+    .flex-item-right {
+      flex: 25%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* background-color: black; */
+      background-color:  #9C27B0;
+      background-image: linear-gradient(120deg, #FF4081, #81fa8b)
+    }
+  
+  
+  
+  
+    .flex-item-right h6{
+  
+      color: white;
+    }
+    .aitem {
+      color:#000000e1;
+      font-size: 50%;
+  
+    }
+  
+    .flex-item-center {
+      /* flex: 10%; */
+      text-align: left;
+    }
+  
+    /* Responsive layout - makes a one column-layout instead of a two-column layout */
+    @media (max-width: 800px) {
+  
+      .flex-item-right,
+      .flex-item-left {
+        flex: 100%;
+      }
+    }
+  </style>
+  
+  
+  <div>
+    <div class="flex-container mb-2">
+      <div class="flex-item-center">
+        <a class="navbar-brand" href="/">
+          <img src="assets/images/armoirie_BF.png" width="80px" height="100px" alt="BURKINA FASO">
+        </a>
+      </div>
+  
+      <div class="col-10 col-md-8 flex-item-left w-25">
+        <h3 class="mt-2">Plateforme d'évaluation du personnel de l'administration publique burkinabè</h3>
+        <h4 class="sub-title mt-4">Bienvenue sur la Plateforme <span class="text-warnings">e</span>No<span class="text-warnings">tation</span></h4>
+
+        <!-- <h4 class="sub-title mt-5">Bienvenue sur la Plateforme <span class="text-warning">e</span>No<span class="text-warning">tation</span></h4> -->
+      </div>
+
+      <div class="col-1 float-right">
+        <a class="navbar-brand" href="/">
+            <img src="assets/images/flag.png" width="80px" height="100px" alt="BURKINA FASO">
+        </a>
+    </div>
+    </div>
+      <!-- <div class="flex-item-right">
+        <div *ngIf="loggedIn; else loggedOut">
+        <div>
+          <h6>Bienvenue</h6>
+          <button class="btn btn-sm btn-outline-secondary" (click)="logout()">Deconnexion</button>
+        </div>
+        <ng-template #loggedOut>
+          <div class="content-box">
+         
+        <div>
+          <button class="btn btn-sm btn-outline-secondary" routerLink="/login">Accès à mon espace</button>
+        </div>
+        <div>
+          <a routerLink="/register">Creér un compte entreprise ?</a>
+        </div>
+      </div>
+        </ng-template>
+        
+      </div>
+  
+      </div> -->
+  
+    <p-menubar class="link-secondary" [model]="items" [autoDisplay]='true'>
+      <ng-template pTemplate="end">
+        <!-- <i *ngIf="isLoggedIn" class="pi pi-spin pi-spinner" style="font-size: 2rem"></i> -->
+        <div *ngIf="isLoggedIn">
+          <p-splitButton label={{matricule}}  icon="pi pi-user"   [model]="sousItems"></p-splitButton>
+        </div>
+        <div *ngIf="!isLoggedIn">
+            <button pButton type="button" icon="pi pi-sign-in"
+                class="p-button-secondary p-button-raised p-button-text p-button-rounded p-mr-3 app-brown p-mr-2"
+                style="background-color: #f8f9fa; color: #756254;" pTooltip="Se connecter"
+                tooltipPosition="bottom" (click)="null">
+            </button>
+            <button pButton type="button" icon="pi pi-user-plus"
+                class="p-button-secondary p-button-raised p-button-text p-button-rounded p-mr-3 app-brown p-mr-2"
+                style="background-color: #f8f9fa; color: #756254;" pTooltip="Creer Un Compte"
+                tooltipPosition="bottom" routerLink="/register">
+            </button>
+        </div>
+    </ng-template>
+    </p-menubar>
+  </div>
+ 
+
+  <!-- Dialog-->
+<p-dialog *ngIf="changePasswordVo" [(visible)]="showDialog" [modal]="true" [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
+[style]="{width: '50vw'}">
+  <ng-template pTemplate="header">
+    <i class="pi-pencil pi p-mr-1"></i>
+    <span class="p-mr-auto">
+      Modifier mon compte
+    </span>
+  </ng-template>
+  <p-progressBar *ngIf="isDialogOpInProgress" mode="indeterminate"></p-progressBar>
+  <p-message *ngIf="dialogErrorMessage" severity="error" [text]="dialogErrorMessage"></p-message>
+  <p-divider></p-divider>
+  <!-- Form -->
+  <form (ngSubmit)="editCompteFonctionnaire()" #dtf="ngForm">
+    <div class="p-fluid p-grid">
+    <div class="p-fluid p-col-12 p-md-6">
+      <label for="currentPassword">Ancien mot de passe</label>
+      <input id="currentPassword" type="password" name="currentPassword" #currentPassword="ngModel" [(ngModel)]="changePasswordVo.currentPassword" pInputText required />
+    </div> 
+    <div class="p-fluid p-col-12 p-md-6">
+      <label for="newPassword">Nouveau mot de passe</label>
+      <input id="newPassword" type="password" name="newPassword" #newPassword="ngModel" [(ngModel)]="changePasswordVo.newPassword" pInputText required />
+    </div>
+    <div class="p-fluid p-col-12 p-md-6">
+      <label for="pwd-confirmation">Confirmation du Mot de Passe</label>
+      <p-password id="pwd-confirmation" name="pwd-confirmation" #confirmation="ngModel"
+        [(ngModel)]="pwdConfirmation" [toggleMask]="true" [feedback]="false" required>
+      </p-password>
+
+      <div class="p-error"
+        *ngIf="confirmation.invalid && (confirmation.dirty || confirmation.touched) ">
+        <span>Veillez renseigner la confirmation du mot de passe</span>
+      </div>
+      <div class="p-error"
+        *ngIf="(confirmation.dirty || confirmation.touched) && changePasswordVo.newPassword !== pwdConfirmation">
+        <span>Les mots de passe ne sont pas les mêmes</span>
+      </div>
+
+      <!-- <div class="p-error"
+        *ngIf="password!.invalid && (password.dirty || password.touched) && password.errors.required">
+        <span>Veillez renseigner votre No. password</span>
+      </div> -->
+    </div>
+ </div>
+    <p-divider></p-divider>
+    <div class="p-ml-auto text-right">
+      <button type="reset" label="Annuler" (click)="showDialog=false"
+              class="p-button-raised p-button-text p-button-success mr-2" pButton></button>
+      <button type="submit" [disabled]="!dtf.form.valid" label="Enregistrer"
+      icon="pi 'pi-save'"
+        class="p-button-raised p-button-text  'p-button-primary'" pButton>
+      </button>
+    </div>
+  </form>
+</p-dialog>
+
+<!-- Dialog-->
+<p-dialog [(visible)]="showDialogPerso" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw'}">
+  <ng-template pTemplate="header">
+      <i class="pi-pencil pi p-mr-1"></i>
+      <span class="p-mr-auto">
+          Modifier données personnelles
+      </span>
+  </ng-template>
+  <p-progressBar *ngIf="isDialogOpInProgress" mode="indeterminate"></p-progressBar>
+  <p-message *ngIf="dialogErrorMessage" severity="error" [text]="dialogErrorMessage"></p-message>
+  <p-divider></p-divider>
+  <!-- Form -->
+  <form (ngSubmit)="edit()" #dtf1="ngForm">
+      <div class="p-fluid p-grid">
+          <div class="p-fluid p-col-12 col-md-6">
+              <label for="ministereInstitution">Ministère rattaché </label>
+            <p-dropdown [(ngModel)]="fonctionnaire.ministereInstitution"   optionLabel="libelle" inputId="ministereInstitution" [options]="ministeres"
+              name="ministereInstitution" placeholder="Selectionner...">
+            </p-dropdown>
+           </div>
+          <div class="p-fluid p-col-12 col-md-6">
+              <label for="emailAddress">Email</label>
+              <input id="emailAddress" name="emailAddress" #emailAddress="ngModel" [(ngModel)]="fonctionnaire.emailAddress"
+                  pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" pInputText required />
+              <div class="p-error"
+                  *ngIf="emailAddress.invalid && (emailAddress.dirty || emailAddress.touched) && emailAddress.errors">
+                  <span>Veillez renseigner l'email</span>
+              </div>
+          </div>
+          <div class="p-fluid p-col-12 col-md-6">
+              <label for="telephone">Telephone</label>
+              <p-inputMask id="telephone" name="telephone" type="tel" #telephone="ngModel" [(ngModel)]="fonctionnaire.telephone"
+              mask="(+226) 99-99-99-99"></p-inputMask>
+              <div class="p-error" *ngIf="telephone.invalid && (telephone.dirty || telephone.touched) && telephone.errors">
+                <span>Veillez renseigner le N° telephone</span></div>
+         </div>
+         <div class="p-fluid p-col-12 col-md-6">
+          <div> <label for="uniteAdministrative">Unité administrative</label></div>
+        <input id="uniteAdministrative" name="uniteAdministrative" #adresse="ngModel"
+            [(ngModel)]="fonctionnaire.uniteAdministrative" rows="4" pInputText />
+        </div>
+         <div class="p-fluid p-col-12 col-md-6">
+          <div> <label for="adresse">Adresse</label></div>
+        <textarea id="adresse" name="adresse" #adresse="ngModel"
+            [(ngModel)]="fonctionnaire.adresse" rows="4" pInputTextarea ></textarea>
+        </div>
+        <div class="p-fluid p-col-12 col-md-6">
+          <label for="ministereInstitution">Fonction </label>
+        <p-dropdown [(ngModel)]="fonctionnaire.profil"   optionLabel="libelle" inputId="profil" [options]="profils"
+          name="fonction" placeholder="Selectionner...">
+        </p-dropdown>
+       </div>
+      </div>
+      
+      <p-divider></p-divider>
+      <div class="p-ml-auto text-right">
+        <button type="reset" label="Annuler" (click)="showDialogPerso=false"
+                    class="p-button-raised p-button-text p-button-success mr-2" pButton></button>
+          <button type="submit" [disabled]="!dtf1.form.valid" label="Enregistrer"
+              icon="pi {{isEditing() ? 'pi-save' : 'pi-plus'}}" class="p-button-raised p-button-text p-button-primary"
+              pButton>
+          </button>
+      </div>
+  </form>
+</p-dialog>
+
+<p-confirmDialog></p-confirmDialog>

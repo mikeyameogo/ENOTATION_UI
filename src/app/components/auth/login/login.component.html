@@ -1,0 +1,54 @@
+<p-toast></p-toast>
+<div id="login-bg" class="app-body">
+  <main class="main d-flex align-items-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-5 mx-auto">
+          <div class="card-group">
+            <div class="card p-4">
+              <div class="card-body">
+                <div class="text-center">
+                  <h3><i class="fa fa-user fa-4x"></i></h3>
+                  <h2 class="text-center">Espace de connexion.</h2>
+                  <p>Connectez-vous par ici</p>
+                  <div class="panel-body">
+                    <form  class="app-form-bg-color p-4 text-left" style="border-radius: 15px;" *ngIf="!isLoggedIn" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+                      <div class="mb-3">
+                        <label for="username" class="form-label">Matricule</label>
+                        <input type="text" class="form-control" name="username" [(ngModel)]="form.username" required
+                        #username="ngModel"  id="username" aria-describedby="username" placeholder="Ex: 329414">
+                      </div>
+                      <div class="alert alert-danger" role="alert" *ngIf="username.errors && f.submitted">
+                        Nom d'utilisateur obligatoire!
+                      </div>
+                      <div class="mb-3">
+                        <label for="password" class="form-label">Mot de passe</label>
+                        <input type="password"  class="form-control" name="password"
+                        [(ngModel)]="form.password" required minlength="4" #password="ngModel"  id="password" placeholder="Saisissez votre mot de passe">
+                      </div>
+                      <div class="alert alert-danger" role="alert" *ngIf="password.errors && f.submitted">
+                        <div *ngIf="password.errors.required">Mot de passe obligatoire</div>
+                        <div *ngIf="password.errors.minlength">
+                          Le mot de passe doit être au moins de 4 caractères!
+                        </div> 
+                      </div>
+                      <button id="bt" type="submit" class="btn btn-lg btn-success">Connexion</button>
+                      <div class="alert alert-danger" role="alert" *ngIf="f.submitted && isLoginFailed">
+                        Échec de la connexion {{ errorMessage }}
+                      </div> 
+                      <button type="button" style="color: white;" class="btn btn-link px-0 text-right ml-4"> <a routerLink="/mot-de-passe-oublier">Mot de passe oublié?</a></button>
+                    </form>
+
+                    
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+

@@ -1,0 +1,150 @@
+<br><br>
+<div>
+  <p-card>
+      <p-toast></p-toast>
+
+
+  <p-table #dt [value]="fonctionnaires" [rows]="5" [paginator]="true"
+    [globalFilterFields]="['matricule','nom','prenom']" [rowHover]="true" dataKey="id"
+    currentPageReportTemplate="Affichage de {first} à {last} de {totalRecords} élements" [showCurrentPageReport]="true">
+    <ng-template pTemplate="caption">
+      <div class="p-d-flex">
+        <div class="col-sm-auto">
+          <span>Mes agents</span>
+        </div>
+        <div class="p-ml-auto p-mr-2 p-input-icon-left">
+          <span class="p-input-icon-left">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" (input)="dt.filterGlobal($any($event.target)!.value, 'contains')"
+              placeholder="Recherche..." />
+          </span>
+        </div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="matricule">Matricule
+          <p-sortIcon field="matricule"></p-sortIcon>
+        </th>
+        <th pSortableColumn="nom">Nom
+          <p-sortIcon field="nom"></p-sortIcon>
+        </th>
+        <th>Prénom</th>
+        <th>Ministère</th>
+        <th>Profil</th>
+        <th  style="width:15%">Actions</th>
+
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-fonctionnaire>
+      <tr>
+        <td>{{fonctionnaire.matricule}}</td>
+        <td>{{fonctionnaire.nom}}</td>
+        <td>{{fonctionnaire.prenom}}</td>
+
+        <td>{{fonctionnaire.ministereInstitution.libelle}}</td>
+        <td>{{fonctionnaire.profil.libelle}}</td>
+        <td class="p-field p-d-flex">
+          <app-actions-toolbal-iud (info)="viewActivite(fonctionnaire.matricule)" [enableBtnAttribuer]="enableBtnAttribuer"  
+            (edit)="onEdit(fonctionnaire)" [enableBtnNoter]="enableBtnNoter" 
+            (rejeter)="onRejeter(fonctionnaire)" [enableBtnRejeter]="enableBtnRejeter"
+            >
+          </app-actions-toolbal-iud>
+        </td>
+        <!--td>
+
+          <button pButton pRipple icon="pi pi-pencil" pTooltip="Noter" tooltipPosition="bottom"
+            class="p-button-rounded p-button-success p-mr-2" (click)="onEdit(fonctionnaire)"></button>
+          <button pButton pRipple icon="pi pi-trash" pTooltip="Rejeter" tooltipPosition="bottom"
+            class="p-button-rounded p-button-danger " (click)="null"></button>
+
+
+        </td-->
+      </tr>
+    </ng-template>
+  </p-table>
+  </p-card>
+</div>
+
+  <!-- Dialog-->
+  <p-dialog [(visible)]="showDialog" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw'}">
+    <ng-template pTemplate="header">
+      <i class="pi-pencil pi p-mr-1"></i>
+      <span class="p-mr-auto">
+        <h4>
+          Attribuer une note à l'agent {{fonctionnaire.matricule}}
+        </h4>
+      </span>
+    </ng-template>
+
+    <p-divider></p-divider>
+   
+    <form [formGroup]="dynamicForm" (ngSubmit)="save()">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-2">
+            <span class="ui-float-label">
+              <input formControlName="idFonctionnaire" id="float-input" type="hidden" size="30" pInputText>
+            </span>
+          </div>
+          <div class="row mt-3">
+            <div class="col-sm-4" *ngFor="let critere of critereGroup ;  let i = index">
+              <div [formGroup]="critere">
+
+                <div class="wrapper">
+                  <div class="col-xs-12 col-sm-6 col-md-8">
+                <span class="ui-float-label">
+                  <input formControlName="id" id="float-input" type="hidden" size="30" pInputText>
+                </span>
+                <span class="ui-float-label">
+                  <label class="style-label" for="float-input">{{listcriteres[i].libelle}} (/{{listcriteres[i].ponderation}} )</label>
+                  <input formControlName="note" id="float-input" type="number" pInputText>
+
+                </span>
+              </div>
+              </div>
+              </div>
+            </div>
+          </div>
+          <div class="wrapper">
+            <div class="col-sm-4">
+              <span class="ui-float-label">
+                <label class="style-label" for="float-input">Observations du supérieur hiérarchique</label>
+
+                <textarea formControlName="observation" id="float-input" rows="3" pInputTextarea></textarea>
+              </span>
+          
+            </div>
+            <div class="col-sm-4">
+              <span class="ui-float-label">
+                <label class="style-label" for="float-input">Contraintes de réalisation relevées</label>
+
+                <textarea formControlName="contraintesRealisation" id="float-input" rows="3" pInputTextarea></textarea>
+              </span>
+
+            </div>
+
+            <div class="col-sm-4">
+              <span class="ui-float-label">
+                <label for="float-input" class="style-label">Points de divergence (s’il y a lieu)</label>
+
+                <textarea formControlName="pointDivergeance" id="float-input" rows="3" pInputTextarea></textarea>
+              </span>
+              <!-- <div *ngIf="competence.invalid && (competence.dirty || competence.touched)">
+                        <label *ngIf="noteForm.controls['competence'].errors.required" class="text-danger">Description du projet obligatoire</label>
+                      </div> -->
+
+            </div>
+          </div>
+        </div>
+        <p-divider></p-divider>
+
+        <div class="p-ml-auto text-right">
+          <button type="submit" label="Enregistrer" value="save" icon="pi pi-plus"
+            class="p-button-raised p-button-text" pButton>
+          </button>
+        </div>
+      </div>
+    </form>
+
+  </p-dialog>

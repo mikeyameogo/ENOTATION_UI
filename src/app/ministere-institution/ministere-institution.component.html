@@ -1,0 +1,71 @@
+<div class="card">
+    <p-toolbar styleClass="p-mb-4">
+        <ng-template pTemplate="left">
+            <button pButton label="Ajouter" icon="pi pi-plus" class="p-button-raised p-button-text p-button-success mr-2"
+            [disabled]="!enableCreate" (click)="onCreate()" >
+          </button>
+        </ng-template>
+    </p-toolbar>
+<p-table [value]="ministereInstitutions" #dt [lazy]="true" (onLazyLoad)="load($event)"
+    [paginator]="true" [rows]="10" [totalRecords]="totalRecords" [loading]="isLoading" [globalFilterFields]="['libelle','code']">
+    <ng-template pTemplate="caption">
+      <div class="p-d-flex p-ai-center p-jc-between" style="text-align: right;"> 
+          <span class="p-input-icon-right">
+              <i class="pi pi-search"></i>
+              <input pInputText type="text" (input)="dt.filterGlobal($any($event.target)!.value, 'contains')" placeholder="Rechercher..." />
+          </span>
+      </div>
+  </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Libellé</th>
+            <th>Section</th>
+            <th>Code</th>
+            <th>Action</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-ministereInstitution>
+        <tr>
+            <td>{{ministereInstitution.libelle}}</td>
+            <td>{{ministereInstitution.section}}</td>
+            <td>{{ministereInstitution.code}}</td>
+            <td>
+                <button pButton pRipple icon="pi pi-pencil" pTooltip="Editer" tooltipPosition="bottom" class="p-button-rounded p-button-success p-mr-2" (click)="onEdit(ministereInstitution)" ></button>
+                <button pButton pRipple icon="pi pi-trash" pTooltip="Supprimer" tooltipPosition="bottom" class="p-button-rounded p-button-warning" (click)="onDelete(ministereInstitution)" ></button>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+  <!-- Dialog-->
+  <p-dialog [(visible)]="showDialog" >
+    <ng-template pTemplate="header">
+      <i class="{{isEditing() ? 'pi-pencil' : 'pi-plus'}} pi p-mr-1"></i>
+      <span class="p-mr-auto">
+        {{ministereInstitution.id ? 'Modifier' : 'Ajouter'}} un ministere 
+      </span>
+    </ng-template>
+    <p-progressBar *ngIf="isDialogOpInProgress" mode="indeterminate"></p-progressBar>
+    <p-message *ngIf="dialogErrorMessage" severity="error" [text]="dialogErrorMessage"></p-message>
+    <p-divider></p-divider>
+    <!-- Form -->
+    <form (ngSubmit)="save()" #dtf="ngForm">
+        <div class="p-field p-fluid">
+            <label for="libelle">Libellé</label>
+            <input id="libelle" name="libelle" #libelle="ngModel" [(ngModel)]="ministereInstitution.libelle" pInputText required />
+        </div>
+        <div class="p-field p-fluid">
+            <label for="code">Code</label>
+            <input id="code" name="code" #code="ngModel" [(ngModel)]="ministereInstitution.code" pInputText required />
+        </div>
+      <p-divider></p-divider>
+      <div class="p-ml-auto text-right">
+        <button type="submit" [disabled]="!dtf.form.valid" label="{{isEditing() ? 'Enregistrer' : 'Ajouter'}}"
+          icon="pi {{isEditing() ? 'pi-save' : 'pi-plus'}}"
+          class="p-button-raised p-button-text {{isEditing() ? 'p-button-primary' : 'p-button-success'}}" pButton>
+        </button>
+      </div>
+    </form>
+  </p-dialog>
+</div>
+

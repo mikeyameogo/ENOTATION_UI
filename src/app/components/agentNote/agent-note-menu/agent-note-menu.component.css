@@ -1,0 +1,87 @@
+
+
+#container {
+    margin: auto;
+    width: 300px;
+}
+
+
+#button {
+    height: 32px;
+    width: 184px;
+    padding-left: 20px;
+
+}
+
+ul, li {
+    margin:0; 
+    padding-top:5px; 
+    list-style:none;
+}
+
+.menu_class span{
+margin-top: 10px;
+}
+
+.file_menu {
+    display:none;
+    width:150px;
+    border: 1px solid #e9ecef;
+    position: relative;
+}
+
+.file_menu li {
+    background-color: #e9ecef;
+    position: relative;
+}
+
+.file_menu li a {
+    color:#495057; 
+    text-decoration:none; 
+    padding:10px; 
+    display:block;
+}
+
+.file_menu li a:hover {
+    padding:10px;
+    font-weight: bold;
+    color: #495057;
+}
+
+.sub {
+    position: absolute;
+    width:100px;
+    border: 1px solid #1c1c1c;
+    display: none;
+    left: 302px;
+    top: 0px;
+}
+
+/* A link that has not been visited */
+a:link {
+    color: white;
+    }
+    /* A link that has been visited */
+    a:visited {
+    color: white;
+    }
+    /* A link that is hovered on */
+    a:hover {
+    color: white;
+    }
+    /* A link that is selected */
+    a:active {
+    color: white;
+    }
+    
+    a { text-decoration: none; }
+.content-box{
+
+    font-size: 12px;
+    text-align: center;
+}
+
+.content-box a{
+
+    margin-top: 10px;
+}

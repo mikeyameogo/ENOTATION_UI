@@ -1,0 +1,48 @@
+<p-card header="Saisir une note d'office" [style]="{width: 'default'}"  class="d-flex ml-7">
+    <p-toast></p-toast>
+    <h3
+     style="margin-left:425px" > Saisir une note d'office</h3>
+    <form (ngSubmit)="save()" #dtf="ngForm" style="margin-top:50px; margin-left: 350px;" >
+        <div class="formgrid grid">
+            <div class="field col-6 md:col-6">
+                <label for="matricule">Matricule</label>
+                <input type="text" pInputText id="matricule" [(ngModel)]="noteRecours.matricule" name="matricule" required autofocus 
+                    class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"/>
+                <small class="p-error" *ngIf="submitted && !noteRecours.matricule">Le matricule est requis.</small>
+            <!-- </div>
+            <div class="field col-6 md:col-6"> -->
+                <label for="note">Note</label>
+                <input type="text" pInputText id="note" [(ngModel)]="noteRecours.note" name="note" required 
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"/>
+                <small class="p-error" *ngIf="submitted && !noteRecours.note">La note est requise.</small>
+            <!-- </div>
+            <div class="field col-6 md:col-6"> -->
+                <label for="note">Année</label>
+                <input type="text" pInputText id="annee" [(ngModel)]="noteRecours.annee" name="annee" required 
+                class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full"/>
+                <small class="p-error" *ngIf="submitted && !noteRecours.annee">L'année de la note est requise.</small>
+                <br>
+            <!-- </div>
+            <br>
+            <div class="p-field-checkbox" class="field col-6 md:col-6"> -->
+                <input class="p-checkbox" type="checkbox" id="checked" [(ngModel)]="checked" name="checked" value="true" />
+                <label for="checked">Souhaitez-vous joindre une fiche de recours ?</label>  
+
+            <div class="p-field p-fluid" *ngIf="checked" >
+                <label for="urlRecours">Fiche de recours</label>
+                <input type="file" id="file" (change)="onSelectFile($event)">
+                <input type="text" [(ngModel)]="noteRecours.urlRecours" name="urlRecours" id="urlRecours" hidden/>
+            </div>
+            <p-divider></p-divider>
+            <!-- <br><br> -->
+            <div class="">
+                <div class="p-ml-auto text-right">
+                    <br>
+                    <button type="reset" label="Annuler" class="p-button-filter mr-3" pButton icon="pi pi-times"></button>
+                    <button type="submit" label="Enregistrer" pButton icon="pi pi-save" class="p-button-primary"></button>
+                </div>
+            </div>
+        </div>
+        </div>
+    </form>
+</p-card>

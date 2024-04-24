@@ -1,0 +1,38 @@
+<br>
+<p-card header="Saisir une note d'office" [style]="{width: 'default'}"  class="d-flex justify-content-center">
+    <p-toast></p-toast>
+    <form (ngSubmit)="save()" #dtf="ngForm">
+        <div class="p-field p-fluid">
+            <label for="matricule">Matricule</label>
+            <input type="text" pInputText id="matricule" [(ngModel)]="noteRecours.matricule" name="matricule" required autofocus />
+            <small class="p-error" *ngIf="submitted && !noteRecours.matricule">Le matricule est requis.</small>
+        </div>
+        <div class="p-field p-fluid" >
+            <label for="note">Note</label>
+            <input type="text" pInputText id="note" [(ngModel)]="noteRecours.note" name="note" required />
+            <small class="p-error" *ngIf="submitted && !noteRecours.note">La note est requise.</small>
+        </div>
+        <div class="p-field p-fluid" >
+            <label for="note">Année</label>
+            <input type="text" pInputText id="annee" [(ngModel)]="noteRecours.annee" name="annee" required />
+            <small class="p-error" *ngIf="submitted && !noteRecours.annee">L'année de la note est requise.</small>
+        </div>
+        <br>
+        <div class="p-field-checkbox">
+            <input class="p-checkbox" type="checkbox" id="checked" [(ngModel)]="checked" name="checked" value="true">
+            <label for="checked">Souhaitez-vous joindre une fiche de recours ?</label>
+        </div>
+
+        <div class="p-field p-fluid" *ngIf="checked" >
+            <label for="urlRecours">Fiche de recours</label>
+            <input type="file" id="file" (change)="onSelectFile($event)">
+            <input type="text" [(ngModel)]="noteRecours.urlRecours" name="urlRecours" id="urlRecours" hidden/>
+        </div>
+        <p-divider></p-divider>
+        <div class="p-ml-auto text-right">
+            <p-button type="submit" label="Enregistrer" icon="pi pi-save"></p-button>
+            <p-button type="reset" label="Annuler" icon="pi pi-times" styleClass="p-button-secondary" [style]="{'margin-left': '.5em'}"></p-button>
+        </div>
+    </form>
+</p-card>
+<br>

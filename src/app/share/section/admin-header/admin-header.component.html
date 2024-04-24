@@ -1,0 +1,86 @@
+<app-header
+  [navbarBrandRouterLink]="['/admin']"
+  [fixed]="true"
+  [navbarBrandFull]="{src: 'assets/img/brand/icons8-accueil.svg', width: 20, height: 20, alt: 'CoreUI Logo'}"
+  [navbarBrandMinimized]="{src: 'assets/img/brand/sygnet.svg', width: 30, height: 30, alt: 'CoreUI Logo'}"
+  [sidebarToggler]="'lg'"
+  [asideMenuToggler]="'lg'">
+  <ul class="nav navbar-nav ml-auto">
+    <li class="nav-item dropdown" dropdown placement="bottom right">
+       <a class="nav-link btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <img src="assets/img/avatars/icons8-utilisateur-masculin-52.png" class="img-avatar"/>
+        </a>
+      <!--a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
+        <img src="assets/img/avatars/icons8-utilisateur-masculin-52.png" class="img-avatar" alt="admin@enatation"/>
+      </a-->
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+        <!--a class="dropdown-item"><i class="fa fa-user"></i> Profil</a-->
+        <a class="dropdown-item" (click)="onEditCompte()"><i class="fa fa-user"></i> Change password</a>
+        <div class="divider"></div>
+        <a class="dropdown-item" (click)="logout()"><i class="fa fa-lock"></i> Déconnexion</a>
+      </div>
+    </li>
+  </ul>
+</app-header>
+
+
+
+
+<!-- Dialog-->
+<p-dialog *ngIf="changePasswordVo" [(visible)]="showDialog" [modal]="true" [breakpoints]="{'960px': '75vw', '640px': '100vw'}"
+[style]="{width: '50vw'}">
+  <ng-template pTemplate="header">
+    <i class="pi-pencil pi p-mr-1"></i>
+    <span class="p-mr-auto">
+      Modifier mon compte
+    </span>
+  </ng-template>
+  <p-progressBar *ngIf="isDialogOpInProgress" mode="indeterminate"></p-progressBar>
+  <p-message *ngIf="dialogErrorMessage" severity="error" [text]="dialogErrorMessage"></p-message>
+  <p-divider></p-divider>
+  <!-- Form -->
+  <form (ngSubmit)="editCompteFonctionnaire()" #dtf="ngForm">
+    <div class="p-fluid p-grid">
+    <div class="p-fluid p-col-12 p-md-6">
+      <label for="currentPassword">Ancien mot de passe</label>
+      <input id="currentPassword" type="password" name="currentPassword" #currentPassword="ngModel" [(ngModel)]="changePasswordVo.currentPassword" pInputText required />
+    </div> 
+    <div class="p-fluid p-col-12 p-md-6">
+      <label for="newPassword">Nouveau mot de passe</label>
+      <input id="newPassword" type="password" name="newPassword" #newPassword="ngModel" [(ngModel)]="changePasswordVo.newPassword" pInputText required />
+    </div>
+    <div class="p-fluid p-col-12 p-md-6">
+      <label for="pwd-confirmation">Confirmation du Mot de Passe</label>
+      <p-password id="pwd-confirmation" name="pwd-confirmation" #confirmation="ngModel"
+        [(ngModel)]="pwdConfirmation" [toggleMask]="true" [feedback]="false" required>
+      </p-password>
+
+      <div class="p-error"
+        *ngIf="confirmation.invalid && (confirmation.dirty || confirmation.touched) ">
+        <span>Veillez renseigner la confirmation du mot de passe</span>
+      </div>
+      <div class="p-error"
+        *ngIf="(confirmation.dirty || confirmation.touched) && changePasswordVo.newPassword !== pwdConfirmation">
+        <span>Les mots de passe ne sont pas les mêmes</span>
+      </div>
+
+      <!-- <div class="p-error"
+        *ngIf="password!.invalid && (password.dirty || password.touched) && password.errors.required">
+        <span>Veillez renseigner votre No. password</span>
+      </div> -->
+    </div>
+ </div>
+    <p-divider></p-divider>
+    <div class="p-ml-auto text-right">
+      <button type="reset" label="Annuler" (click)="showDialog=false"
+              class="p-button-raised p-button-text p-button-success mr-2" pButton></button>
+      <button type="submit" [disabled]="!dtf.form.valid" label="Enregistrer"
+      icon="pi 'pi-save'"
+        class="p-button-raised p-button-text  'p-button-primary'" pButton>
+      </button>
+    </div>
+  </form>
+</p-dialog>
+
+
+

@@ -1,0 +1,197 @@
+<div>
+    <p-card>
+        <p-toast></p-toast>
+
+        <div class="p-d-flex">
+            <app-crud-toolbar [enableCreate]="enableCreate" (create)="onCreate()">
+            </app-crud-toolbar>
+            <div class="p-ml-auto">
+                <p-message *ngIf="message" [severity]="message.severity" [text]="message.summary"></p-message>
+                <p-progressSpinner *ngIf="isOpInProgress" strokeWidth="4" [style]="{width: '50px', height: '50px'}">
+                </p-progressSpinner>
+            </div>
+        </div>
+        <p-divider></p-divider>
+        <p-table #dt [value]="fonctionnaires" responsiveLayout="stack" [paginator]="true" [rows]="recordsPerPage"
+            [loading]="isLoading" (onLazyLoad)="load($event)" [totalRecords]="totalRecords"
+            [globalFilterFields]="['matricule','nom','prenom']"
+            currentPageReportTemplate="Affichage {first} à {last} de {totalRecords} élements"
+            [showCurrentPageReport]=true [rowsPerPageOptions]="[10, 20]" styleClass="p-datatable-sm">
+            <ng-template pTemplate="caption">
+                <div class="p-d-flex">
+                    <div class="col-sm-auto">
+                        <span>Liste des fonctionnaires</span>
+                    </div>
+                    <div class="p-ml-auto p-mr-2 p-input-icon-left">
+                        <span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text"
+                                (input)="dt.filterGlobal($any($event.target)!.value, 'contains')"
+                                placeholder="Recherche..." />
+                        </span>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th pSortableColumn="matricule">Matricule
+                        <p-sortIcon field="matricule"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="nom">Nom
+                        <p-sortIcon field="nom"></p-sortIcon>
+                    </th>
+                    <th pSortableColumn="prenom">Prenom
+                        <p-sortIcon field="prenom"></p-sortIcon>
+                    </th>
+                    <th>Ministere</th>
+                    <th>Profil</th>
+                    <th style="width:10%">Actions</th>
+
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-fonctionnaire let-columns="columns">
+                <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" [pContextMenuRow]="fonctionnaire">
+                <tr>
+                    <td><span class="p-column-title">Matricule</span>{{fonctionnaire.matricule}}</td>
+                    <td><span class="p-column-title">Nom</span>{{fonctionnaire.nom}}</td>
+                    <td><span class="p-column-title">Prenom</span>{{fonctionnaire.prenom}}</td>
+
+                    <td><span class="p-column-title">Ministère</span>{{fonctionnaire.ministereInstitution.libelle}}</td>
+                    <td><span class="p-column-title">Libelle</span>{{fonctionnaire.profil.libelle}}</td>
+
+
+                    <td>
+                        <app-actions-toolbal-iud (info)="onInfo(fonctionnaire)" [enableBtnInfo]="enableBtnInfo"
+                            (edit)="onEdit(fonctionnaire)" [enableBtnEdit]="enableBtnEdit">
+                        </app-actions-toolbal-iud>
+
+
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-card>
+</div>
+
+<!-- Dialog-->
+<p-dialog [(visible)]="showDialog" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '75vw'}">
+    <ng-template pTemplate="header">
+        <i class="pi-pencil pi p-mr-1"></i>
+        <span class="p-mr-auto">
+            Modifier un critère
+        </span>
+    </ng-template>
+    <p-progressBar *ngIf="isDialogOpInProgress" mode="indeterminate"></p-progressBar>
+    <p-message *ngIf="dialogErrorMessage" severity="error" [text]="dialogErrorMessage"></p-message>
+    <p-divider></p-divider>
+    <!-- Form -->
+    <form (ngSubmit)="edit()" #dtf="ngForm">
+        <div class="p-fluid p-grid">
+            <div class="p-fluid p-col-12 col-md-4">
+                <label for="matricle">Matricule</label>
+                <input id="matricle" name="matricle" #matricle="ngModel" [(ngModel)]="fonctionnaire.matricule"
+                    pInputText required />
+            </div>
+            <div class="p-fluid p-col-12 col-md-4">
+                <label for="nom">Nom</label>
+                <input id="nom" name="nom" #nom="ngModel" [(ngModel)]="fonctionnaire.nom" pInputText required />
+            </div>
+            <div class="p-fluid p-col-12 col-md-4">
+                <label for="prenom">Prénom</label>
+                <input id="prenom" name="prenom" #prenom="ngModel" [(ngModel)]="fonctionnaire.prenom" pInputText
+                    required />
+            </div>
+            <div class="p-fluid p-col-12 col-md-4">
+                <label for="sexe">Sexe</label>
+                <input id="sexe" name="sexe" #sexe="ngModel" [(ngModel)]="fonctionnaire.sexe" pInputText
+                    required />
+            </div>
+            <div class="p-fluid p-col-12 col-md-4">
+                <label for="fonction">Fonction</label>
+                <input id="fonction" name="fonction" #fonction="ngModel" [(ngModel)]="fonctionnaire.fonction"
+                    pInputText />
+            </div>
+            <div class="p-fluid p-col-12 col-md-4">
+                <label for="profil">Profil </label>
+              <p-dropdown [(ngModel)]="fonctionnaire.profil"   optionLabel="libelle" inputId="profil" [options]="profils"
+                name="profil" placeholder="Selectionner...">
+              </p-dropdown>
+             </div>
+            <div class="p-fluid p-col-12 col-md-4">
+                <label for="ministereInstitution">Ministère rattaché </label>
+              <p-dropdown [(ngModel)]="fonctionnaire.ministereInstitution"   optionLabel="libelle" inputId="ministereInstitution" [options]="ministeres"
+                name="ministereInstitution" placeholder="Selectionner...">
+              </p-dropdown>
+             </div>
+            <div class="p-fluid p-col-12 col-md-4">
+                <label for="uniteAdministrative">Unité administrative</label>
+                <input id="uniteAdministrative" name="uniteAdministrative" #nom="ngModel"
+                    [(ngModel)]="fonctionnaire.uniteAdministrative" pInputText />
+            </div>
+            <div class="p-fluid p-col-12 col-md-4">
+                <label for="categorie">Categorie</label>
+                <input id="categorie" name="categorie" #categorie="ngModel" [(ngModel)]="fonctionnaire.categorie"
+                    pInputText />
+            </div>
+            <div class="p-fluid p-col-12 col-md-4">
+                <label for="classe">Classe</label>
+                <input id="classe" name="classe" #classe="ngModel" [(ngModel)]="fonctionnaire.classe" pInputText />
+            </div>
+            <div class="p-fluid p-col-12 col-md-4">
+                <label for="echelle">Echelle</label>
+                <input id="echelle" name="echelle" #echelle="ngModel" [(ngModel)]="fonctionnaire.echelle" pInputText />
+            </div>
+            <div class="p-fluid p-col-12 col-md-4">
+                <label for="echelon">Echelon</label>
+                <input id="echelon" name="echelon" #echelon="ngModel" [(ngModel)]="fonctionnaire.echelon" pInputText />
+            </div>
+            <div class="p-fluid p-col-12 col-md-4">
+                <label for="sousPosition">Sous position</label>
+                <input id="sousPosition" name="sousPosition" #sousPosition="ngModel"
+                    [(ngModel)]="fonctionnaire.sousPosition" pInputText />
+            </div>
+            <div class="p-fluid p-col-12 col-md-4">
+                <label for="emailAddress">Email</label>
+                <input id="emailAddress" name="emailAddress" #emailAddress="ngModel" [(ngModel)]="fonctionnaire.emailAddress"
+                    pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" pInputText required />
+                <div class="p-error"
+                    *ngIf="emailAddress.invalid && (emailAddress.dirty || emailAddress.touched) && emailAddress.errors">
+                    <span>Veillez renseigner l'email</span>
+                </div>
+            </div>
+            <div class="p-fluid p-col-12 col-md-4">
+                <label for="telephone">Telephone</label>
+                <p-inputMask id="telephone" name="telephone" type="tel" #telephone="ngModel" [(ngModel)]="fonctionnaire.telephone"
+                mask="(+226) 99-99-99-99"></p-inputMask>
+                <div class="p-error" *ngIf="telephone.invalid && (telephone.dirty || telephone.touched) && telephone.errors">
+                  <span>Veillez renseigner le N° telephone</span></div>
+           </div>
+           <div class="p-fluid p-col-12 col-md-4">
+            <div> <label for="adresse">Adresse</label></div>
+          <textarea id="adresse" name="adresse" #adresse="ngModel"
+              [(ngModel)]="fonctionnaire.adresse" rows="4" pInputTextarea ></textarea>
+          </div>
+
+        </div>
+        <!--div class="p-field p-fluid">
+          <label for="typeAgents">Type d'agent </label>
+          <p-dropdown [(ngModel)]="critere.typeAgent" optionLabel="libelle" inputId="typeAgents"
+            [options]="typeAgents" name="typeAgent" placeholder="Selectionner...">
+        </p-dropdown>
+        </div-->
+
+        <!--div class="p-field p-fluid">
+            <label for="ponderation">Ponderation</label>
+            <input id="ponderation"  name="ponderation" #ponderation="ngModel" [(ngModel)]="critere.ponderation" pInputText required />
+        </div-->
+        <p-divider></p-divider>
+        <div class="p-ml-auto text-right">
+            <button type="submit" [disabled]="!dtf.form.valid" label="Enregistrer"
+                icon="pi {{isEditing() ? 'pi-save' : 'pi-plus'}}" class="p-button-raised p-button-text p-button-primary"
+                pButton>
+            </button>
+        </div>
+    </form>
+</p-dialog>
+
+<p-confirmDialog></p-confirmDialog>

@@ -1,0 +1,126 @@
+<br><br>
+<div>
+<p-card>
+<p-toast></p-toast>
+
+    <div class="p-d-flex">
+      <app-crud-toolbar *ngIf="isDrh" [enableCreate]="enableCreate" (create)="openNew()">
+      </app-crud-toolbar>
+      <div class="p-ml-auto">
+        <p-message *ngIf="message" [severity]="message.severity" [text]="message.summary"></p-message>
+        <p-progressSpinner *ngIf="isOpInProgress" strokeWidth="4" [style]="{width: '50px', height: '50px'}">
+        </p-progressSpinner>
+      </div>
+    </div>
+    <p-divider></p-divider>
+   
+    <p-table #dt [value]="fichesPostes" responsiveLayout="stack" [paginator]="true" [rows]="recordsPerPage"
+    [loading]="isLoading" (onLazyLoad)="load($event)" [totalRecords]="totalRecords"
+    [globalFilterFields]="['code','libelle','categorie']"
+    currentPageReportTemplate="Affichage {first} à {last} de {totalRecords} élements" [showCurrentPageReport]=true
+    [rowsPerPageOptions]="[10, 20]" styleClass="p-datatable-sm">
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                <h3 class="p-m-0">Liste des fiches de poste</h3>
+                <span class="p-input-icon-left">
+                    <!-- <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="dt.filterGlobal($any($event.target)!.value, 'contains')" placeholder="Rechercher..." /> -->
+                     <p-columnFilter field="categorie" matchMode="in" [showMenu]="false">
+                        <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                            <p-multiSelect [ngModel]="value" [options]="categories" placeholder="Afficher par catégorie" (onChange)="filter($event.value)" optionLabel="libelle">
+                                <ng-template let-option pTemplate="item">
+                                    <div class="p-multiselect-categorie-option">
+                                        <!-- <img [alt]="option.label" src="assets/showcase/images/demo/avatar/{{option.image}}" width="32" style="vertical-align: middle" /> -->
+                                        <span class="p-ml-1">{{option.libelle}}</span>
+                                    </div>
+                                </ng-template>
+                            </p-multiSelect>
+                        </ng-template>
+                    </p-columnFilter>
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Code </th>
+                <th>Intitulé du poste </th>
+                <th>Metier </th>
+                <!-- <th pSortableColumn="categorie">Categorie <p-sortIcon field="categorie"></p-sortIcon></th> -->
+                <th>Action</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" pTemplate="body" let-rowData let-rowIndex="rowIndex" let-fichesPoste let-columns="columns">
+            <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" [pContextMenuRow]="fichesPoste">
+                <td><span class="p-column-title">Code</span>{{fichesPoste.code}}</td>
+                <td><span class="p-column-title">Libelle</span>{{fichesPoste.libelle}}</td>
+                <td><span class="p-column-title">Libelle</span>{{fichesPoste ? fichesPoste.categorie.libelle : ''}}</td>
+                <td>
+                    <button pButton pRipple icon="pi pi-download" class="p-button-rounded p-button-primary p-mr-2" (click)="onDownload(fichesPoste)" pTooltip="Télécharger"></button>
+                    <button pButton pRipple icon="pi pi-pencil" *ngIf="isDrh" class="p-button-rounded p-button-warning p-mr-2" (click)="onEdit(fichesPoste)" pTooltip="Modifier"></button>
+                    <button pButton pRipple icon="pi pi-trash" *ngIf="isDrh" class="p-button-rounded p-button-danger mr-2" (click)="onDelete(fichesPoste)" pTooltip="Supprimer"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+</div>
+
+<p-dialog [(visible)]="showDialog" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '50vw'}">
+    
+    <!--Entete du pop-up d'enregistrement d'une fiche de poste-->
+    <ng-template pTemplate="header">
+        <i class="{{isEditing() ? 'pi-pencil' : 'pi-plus'}} pi p-mr-1"></i>
+        <span class="p-mr-auto">
+          {{fichesPoste.id ? 'Modifier' : 'Ajouter'}} une fiche de poste 
+        </span>
+    </ng-template>
+      <!-- <p-progressBar *ngIf="isDialogOpInProgress" mode="indeterminate"></p-progressBar> -->
+      <p-message *ngIf="dialogErrorMessage" severity="error" [text]="dialogErrorMessage"></p-message>
+      <p-divider></p-divider>
+    
+      <!-- Form -->
+    <form (ngSubmit)="saveFichePoste()" #dtf="ngForm">
+        <div class="p-field p-fluid">
+            <label for="code">Code</label>
+            <input type="text" pInputText id="code" [(ngModel)]="fichesPoste.code" name="code" required autofocus />
+            <small class="p-error" *ngIf="submitted && !fichesPoste.code">Le code est requis.</small>
+        </div>
+        <div class="p-field p-fluid">
+            <label for="libelle">Intitulé du poste</label>
+            <input type="text" pInputText id="libelle" [(ngModel)]="fichesPoste.libelle" name="libelle" required />
+            <small class="p-error" *ngIf="submitted && !fichesPoste.libelle">Le libellé est requis.</small>
+        </div>
+
+        <div class="p-field p-fluid">
+            <label for="categorie">Metier</label>
+            <p-autoComplete inputId="categorie" #categorie="ngModel"  name="categorie" [(ngModel)]="fichesPoste.categorie" [suggestions]="filteredCategorieI" placeholder="Selectionnez ..." (completeMethod)="filteredCategorie($event)" field="libelle" [dropdown]="true">
+              <ng-template let-categorie pTemplate="item">
+                  <div class="categorie-item">
+                      <div>{{categorie.libelle}}</div>
+                  </div>
+              </ng-template>
+            </p-autoComplete>
+        </div>
+
+        <div class="p-field p-fluid p-col-6" style="text-align: left;">
+            <label for="description">Fiche de poste</label>
+            <input type="file" id="file" (change)="onSelectFile($event)">
+            <input type="text" [(ngModel)]="fichesPoste.url" name="url" id="url" hidden/>
+        </div>
+        <p-divider></p-divider>
+        <!-- <div class="p-ml-auto text-right">
+            <button type="submit" [disabled]="!dtf.form.valid" label="{{isEditing() ? 'Enregistrer' : 'Ajouter'}}"
+                icon="pi {{isEditing() ? 'pi-save' : 'pi-plus'}}"
+                class="p-button-raised p-button-text {{isEditing() ? 'p-button-primary' : 'p-button-success'}}" pButton>
+            </button>
+        </div> -->
+       
+        <div class="p-ml-auto text-right">
+            <p-button type="submit" [disabled]="!dtf.form.valid" label="{{isEditing() ? 'Enregistrer' : 'Ajouter'}}" icon="pi {{isEditing() ? 'pi-save' : 'pi-plus'}}"
+            class="p-button-raised p-button-text {{isEditing() ? 'p-button-primary' : 'p-button-success'}}"></p-button>
+            <p-button type="reset" label="Annuler" (click)="showDialog=false" icon="pi pi-times" styleClass="p-button-secondary" [style]="{'margin-left': '.5em'}"></p-button>
+        </div>
+    </form>
+</p-dialog>
+
+<p-confirmDialog></p-confirmDialog>

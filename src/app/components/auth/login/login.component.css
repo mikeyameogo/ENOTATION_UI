@@ -1,0 +1,31 @@
+.box-shadow {
+    -webkit-box-shadow: 0 10px 6px -6px #777;
+       -moz-box-shadow: 0 10px 6px -6px #777;
+            box-shadow: 0 10px 6px -6px #777;
+}
+
+#bt{
+    background-color: #ED882F;
+    border-color: #ED882F;
+}
+
+.form-gap {
+    padding-top: 70px;
+}
+
+.bg-prime {
+    /* background-color:  #9C27B0;
+    background-image: linear-gradient(120deg, #FF4081, #81D4FA) */
+    background-color:  #9C27B0;
+    background-image: linear-gradient(120deg, #546e7a, #546e7a)
+    
+}
+#login-bg{
+    margin-top: 30px;
+    /* margin-bottom: 200px; */
+}
+
+#bt{
+    background-color: #002a40;
+    border-color: #002a40;
+}
